@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+    environment {
+        DOCKER_CREDS = "25342813-c61f-46c8-93e4-5dfe36e79703"
+        BRANCH_NAME = "main"
+    }
+    stages {
+        stage("checkout") {
+            steps {
+                script {
+                withCredentials([usernamePassword(credentialsId: "fbdd2d39-4391-44aa-8b6a-61a2e12f4761", usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                        sh "git clone -b main https://github.com/Dollydhruv123/medium-docker-nodejs.git"
+
+                    }
+                }
+            }
+        }
+        stage("build docker image") {
+            steps {
+                script {
+                    dir("medium-docker-nodejs") {
+                        sh "docker build -t demo-node ."
+                    }
+                }
+            }
+        }
+       }
+    //   post { 
+    //       always { 
+    //           // cleanWs()
+    //     }
+    // }
+}
